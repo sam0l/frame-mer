@@ -1,65 +1,124 @@
-function combineImages() {
-    const baseImageInput = document.getElementById('baseImageInput');
-    const canvas = document.getElementById('canvas');
-    const ctx = canvas.getContext('2d');
-    const outputImage = document.getElementById('outputImage');
-    const downloadLink = document.getElementById('downloadLink');
-    const scaleSlider = document.getElementById('scaleSlider');
-    const xPosSlider = document.getElementById('xPosSlider');
-    const yPosSlider = document.getElementById('yPosSlider');
+let baseImage = null;
+let scale = 1;
+let xPos = 0;
+let yPos = 0;
+let isDragging = false;
+let startX, startY;
 
-    if (!baseImageInput.files[0]) {
-        alert('Please upload a base image.');
-        return;
-    }
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+const outputImage = document.getElementById('outputImage');
+const downloadLink = document.getElementById('downloadLink');
+const frameImage = new Image();
+frameImage.src = '/frames/frame.png';
 
-    const baseImage = new Image();
-    const frameImage = new Image();
+function drawCanvas() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Set canvas to fixed 1000x1000 resolution
-    canvas.width = 1000;
-    canvas.height = 1000;
-
-    baseImage.onload = function () {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        // Scale base image based on slider (0.5 to 4.0)
-        const scale = parseFloat(scaleSlider.value);
+    if (baseImage) {
         const baseWidth = baseImage.width * scale;
         const baseHeight = baseImage.height * scale;
-
-        // Position base image using sliders, allowing it to extend beyond canvas
-        const maxX = canvas.width - baseWidth;
-        const maxY = canvas.height - baseHeight;
-        const xPos = (xPosSlider.value / 100) * maxX;
-        const yPos = (yPosSlider.value / 100) * maxY;
-
-        // Draw base image, clipping occurs naturally if it exceeds canvas
         ctx.drawImage(baseImage, xPos, yPos, baseWidth, baseHeight);
+    }
 
-        frameImage.onload = function () {
-            // Fix frame size to 1000x1000 (scaled from 1800x1800)
-            const frameWidth = 1000;
-            const frameHeight = 1000;
-            ctx.drawImage(frameImage, 0, 0, frameWidth, frameHeight);
+    // Draw frame fixed at 1000x1000
+    ctx.drawImage(frameImage, 0, 0, 1000, 1000);
 
-            const combinedImage = canvas.toDataURL('image/png');
-            outputImage.src = combinedImage;
-            outputImage.style.display = 'block';
-            downloadLink.href = combinedImage;
-            downloadLink.style.display = 'block';
-            canvas.style.display = 'none';
-        };
-
-        frameImage.src = '/frames/frame.png'; // Your 1800x1800 frame
-    };
-    baseImage.src = URL.createObjectURL(baseImageInput.files[0]);
-
-    // Update on slider change for real-time preview
-    [scaleSlider, xPosSlider, yPosSlider].forEach(slider => {
-        slider.oninput = combineImages;
-    });
+    // Update download link
+    const combinedImage = canvas.toDataURL('image/png');
+    outputImage.src = combinedImage;
+    downloadLink.href = combinedImage;
 }
 
-// Initial call to set up sliders
-document.getElementById('baseImageInput').onchange = combineImages;
+// Handle image upload
+document.getElementById('baseImageInput').addEventListener('change', function (e) {
+    if (e.target.files[0]) {
+        baseImage = new Image();
+        baseImage.onload = function () {
+            // Reset position and scale
+            scale = 1;
+            xPos = (1000 - baseImage.width) / 2; // Center initially
+            yPos = (1000 - baseImage.height) / 2;
+            drawCanvas();
+        };
+        baseImage.src = URL.createObjectURL(e.target.files[0]);
+    }
+});
+
+// Mouse events
+canvas.addEventListener('mousedown', startDragging);
+canvas.addEventListener('mousemove', drag);
+canvas.addEventListener('mouseup', stopDragging);
+canvas.addEventListener('wheel', scaleImage);
+
+// Touch events
+canvas.addEventListener('touchstart', handleTouchStart);
+canvas.addEventListener('touchmove', handleTouchMove);
+canvas.addEventListener('touchend', stopDragging);
+
+function startDragging(e) {
+    isDragging = true;
+    startX = e.clientX - xPos;
+    startY = e.clientY - yPos;
+    e.preventDefault();
+}
+
+function drag(e) {
+    if (isDragging) {
+        xPos = e.clientX - startX;
+        yPos = e.clientY - startY;
+        drawCanvas();
+    }
+}
+
+function stopDragging() {
+    isDragging = false;
+}
+
+function scaleImage(e) {
+    e.preventDefault();
+    const delta = e.deltaY * -0.001; // Scroll direction
+    scale = Math.max(0.5, Math.min(4, scale + delta)); // Clamp between 0.5 and 4
+    drawCanvas();
+}
+
+// Touch handling
+let initialDistance = null;
+
+function getTouchDistance(touches) {
+    const dx = touches[0].clientX - touches[1].clientX;
+    const dy = touches[0].clientY - touches[1].clientY;
+    return Math.sqrt(dx * dx + dy * dy);
+}
+
+function handleTouchStart(e) {
+    e.preventDefault();
+    if (e.touches.length === 1) {
+        isDragging = true;
+        startX = e.touches[0].clientX - xPos;
+        startY = e.touches[0].clientY - yPos;
+    } else if (e.touches.length === 2) {
+        isDragging = false;
+        initialDistance = getTouchDistance(e.touches);
+    }
+}
+
+function handleTouchMove(e) {
+    e.preventDefault();
+    if (e.touches.length === 1 && isDragging) {
+        xPos = e.touches[0].clientX - startX;
+        yPos = e.touches[0].clientY - startY;
+        drawCanvas();
+    } else if (e.touches.length === 2) {
+        const currentDistance = getTouchDistance(e.touches);
+        if (initialDistance) {
+            const scaleChange = currentDistance / initialDistance;
+            scale = Math.max(0.5, Math.min(4, scale * scaleChange));
+            initialDistance = currentDistance;
+            drawCanvas();
+        }
+    }
+}
+
+// Initial frame load
+frameImage.onload = drawCanvas;

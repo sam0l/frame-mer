@@ -2,9 +2,10 @@ body {
     font-family: Arial, sans-serif;
     text-align: center;
     padding: 20px;
+    margin: 0;
 }
 .container {
-    max-width: 800px;
+    max-width: 1000px;
     margin: 0 auto;
 }
 .upload-section {
@@ -14,26 +15,15 @@ label {
     display: block;
     margin: 10px 0 5px;
 }
-button {
-    padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    cursor: pointer;
-    margin-top: 10px;
+p {
+    font-size: 14px;
+    color: #666;
 }
-button:hover {
-    background-color: #45a049;
-}
-.controls {
-    margin-top: 15px;
-}
-.controls label {
-    display: inline-block;
-    margin-right: 10px;
-}
-.controls input[type="range"] {
-    width: 150px;
+#canvas {
+    border: 1px solid #ccc;
+    touch-action: none; /* Prevents default touch behaviors */
+    max-width: 100%;
+    height: auto;
 }
 .result-section img {
     max-width: 100%;
