@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TECHSEM DP BLAST GENERATOR</title>
+    <title>TECHSEM DP BLAST GENERATOR 3000</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>TECHSEM DP BLAST GENERATOR</h1>
+    <h1>UPLOAD IMAGE TO ADD FRAME, CLICK BUTTON TO DOWNLOAD (Or Right-Click Save As at Image)</h1>
     <div class="container">
         <div class="upload-section">
-            <label>Upload Image Here:</label>
+            <label>Upload Image:</label>
             <input type="file" id="baseImageInput" accept="image/*">
             <a id="downloadLink" href="#" download="combined-image.png" class="disabled">Download</a>
             <p>Drag to move, pinch/scroll to scale (mobile), or use mouse wheel (desktop)</p>
@@ -21,14 +21,15 @@
             <img id="outputImage" alt="Combined Image" style="display: none;">
         </div>
         <div class="text-section">
-            <label for="textInput">Add Text:</label>
+            <label for="textInput">Notes:</label>
             <select id="fontSelect">
                 <option value="Arial">Arial</option>
                 <option value="Times New Roman">Times New Roman</option>
                 <option value="Courier New">Courier New</option>
                 <option value="Georgia">Georgia</option>
             </select>
-            <textarea id="textInput" placeholder="Type here"></textarea>
+            <textarea id="textInput" placeholder="Type notes here (supports emojis)"></textarea>
+            <button id="saveTextBtn">Save Notes</button>
         </div>
     </div>
     <script src="script.js"></script>

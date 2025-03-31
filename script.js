@@ -4,7 +4,6 @@ let xPos = 0;
 let yPos = 0;
 let isDragging = false;
 let startX, startY;
-let textContent = '';
 let isTextEditable = true; // Flag for text editability
 
 const canvas = document.getElementById('canvas');
@@ -13,6 +12,7 @@ const outputImage = document.getElementById('outputImage');
 const downloadLink = document.getElementById('downloadLink');
 const textInput = document.getElementById('textInput');
 const fontSelect = document.getElementById('fontSelect');
+const saveTextBtn = document.getElementById('saveTextBtn');
 const frameImage = new Image();
 frameImage.src = '/frames/frame.png';
 
@@ -33,18 +33,7 @@ function drawCanvas() {
     // Draw frame fixed at 1000x1000
     ctx.drawImage(frameImage, 0, 0, 1000, 1000);
 
-    // Draw text
-    if (textContent) {
-        ctx.font = `30px ${fontSelect.value}`;
-        ctx.fillStyle = 'white';
-        ctx.textAlign = 'center';
-        ctx.fillText(textContent, 500, 900); // Centered near bottom
-        ctx.strokeStyle = 'black';
-        ctx.lineWidth = 2;
-        ctx.strokeText(textContent, 500, 900); // Outline for readability
-    }
-
-    // Update download link
+    // Update download link (no text on image)
     const combinedImage = canvas.toDataURL('image/png');
     outputImage.src = combinedImage;
     downloadLink.href = combinedImage;
@@ -64,16 +53,34 @@ document.getElementById('baseImageInput').addEventListener('change', function (e
     }
 });
 
-// Handle text input
-textInput.addEventListener('input', function () {
-    if (isTextEditable) {
-        textContent = textInput.value;
-        drawCanvas();
+// Load saved text on page load
+window.addEventListener('load', function () {
+    const savedText = localStorage.getItem('savedText');
+    if (savedText) {
+        textInput.value = savedText;
     }
+    const savedFont = localStorage.getItem('savedFont');
+    if (savedFont) {
+        fontSelect.value = savedFont;
+    }
+    updateTextStyle();
 });
 
-// Handle font change
-fontSelect.addEventListener('change', drawCanvas);
+// Update text style on font change
+fontSelect.addEventListener('change', updateTextStyle);
+
+function updateTextStyle() {
+    textInput.style.fontFamily = fontSelect.value;
+}
+
+// Save text to local storage
+saveTextBtn.addEventListener('click', function () {
+    if (isTextEditable) {
+        localStorage.setItem('savedText', textInput.value);
+        localStorage.setItem('savedFont', fontSelect.value);
+        alert('Notes saved!');
+    }
+});
 
 // Mouse events
 canvas.addEventListener('mousedown', startDragging);
@@ -150,10 +157,11 @@ function handleTouchMove(e) {
     }
 }
 
-// Toggle text editability (for testing, you can call this in console: toggleTextEditability())
+// Toggle text editability (call via console: toggleTextEditability())
 function toggleTextEditability() {
     isTextEditable = !isTextEditable;
     textInput.disabled = !isTextEditable;
+    saveTextBtn.disabled = !isTextEditable;
     console.log(`Text editability: ${isTextEditable}`);
 }
 
