@@ -4,15 +4,11 @@ let xPos = 0;
 let yPos = 0;
 let isDragging = false;
 let startX, startY;
-let isTextEditable = true; // Flag for text editability
 
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 const outputImage = document.getElementById('outputImage');
 const downloadLink = document.getElementById('downloadLink');
-const textInput = document.getElementById('textInput');
-const fontSelect = document.getElementById('fontSelect');
-const saveTextBtn = document.getElementById('saveTextBtn');
 const frameImage = new Image();
 frameImage.src = '/frames/frame.png';
 
@@ -50,35 +46,6 @@ document.getElementById('baseImageInput').addEventListener('change', function (e
             drawCanvas();
         };
         baseImage.src = URL.createObjectURL(e.target.files[0]);
-    }
-});
-
-// Load saved text on page load
-window.addEventListener('load', function () {
-    const savedText = localStorage.getItem('savedText');
-    if (savedText) {
-        textInput.value = savedText;
-    }
-    const savedFont = localStorage.getItem('savedFont');
-    if (savedFont) {
-        fontSelect.value = savedFont;
-    }
-    updateTextStyle();
-});
-
-// Update text style on font change
-fontSelect.addEventListener('change', updateTextStyle);
-
-function updateTextStyle() {
-    textInput.style.fontFamily = fontSelect.value;
-}
-
-// Save text to local storage
-saveTextBtn.addEventListener('click', function () {
-    if (isTextEditable) {
-        localStorage.setItem('savedText', textInput.value);
-        localStorage.setItem('savedFont', fontSelect.value);
-        alert('Notes saved!');
     }
 });
 
@@ -155,14 +122,6 @@ function handleTouchMove(e) {
             drawCanvas();
         }
     }
-}
-
-// Toggle text editability (call via console: toggleTextEditability())
-function toggleTextEditability() {
-    isTextEditable = !isTextEditable;
-    textInput.disabled = !isTextEditable;
-    saveTextBtn.disabled = !isTextEditable;
-    console.log(`Text editability: ${isTextEditable}`);
 }
 
 // Initial frame load
