@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Combiner</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Image Combiner</h1>
+    <div class="container">
+        <div class="upload-section">
+            <label>Upload Base Image:</label>
+            <input type="file" id="baseImageInput" accept="image/*">
+            <div class="controls">
+                <label>Frame Scale (0.5 - 2.0):</label>
+                <input type="range" id="scaleSlider" min="0.5" max="10" step="0.1" value="1">
+                <label>X Position:</label>
+                <input type="range" id="xPosSlider" min="0" max="200" value="0">
+                <label>Y Position:</label>
+                <input type="range" id="yPosSlider" min="0" max="200" value="0">
+            </div>
+            <button onclick="combineImages()">Combine Images</button>
+        </div>
+        <canvas id="canvas" style="display: none;"></canvas>
+        <div id="result" class="result-section">
+            <h3>Result:</h3>
+            <img id="outputImage" alt="Combined Image">
+            <a id="downloadLink" href="#" download="combined-image.png">Download</a>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
