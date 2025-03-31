@@ -21,7 +21,7 @@ p {
 }
 #canvas {
     border: 1px solid #ccc;
-    touch-action: none; /* Prevents default touch behaviors */
+    touch-action: none;
     max-width: 100%;
     height: auto;
 }
@@ -30,8 +30,33 @@ p {
     margin-top: 20px;
 }
 #downloadLink {
-    display: block;
-    margin-top: 10px;
+    display: inline-block;
+    margin-left: 20px;
+    padding: 8px 16px;
     color: #4CAF50;
     text-decoration: none;
+    border: 1px solid #4CAF50;
+    border-radius: 4px;
+}
+#downloadLink.disabled {
+    color: #ccc;
+    border-color: #ccc;
+    pointer-events: none;
+}
+.text-section {
+    margin-top: 20px;
+}
+#fontSelect {
+    padding: 5px;
+    margin: 10px 0;
+}
+#textInput {
+    width: 100%;
+    max-width: 600px;
+    height: 100px;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
 }

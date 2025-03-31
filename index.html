@@ -3,22 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Combiner</title>
+    <title>TECHSEM DP BLAST GENERATOR</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Image Combiner</h1>
+    <h1>TECHSEM DP BLAST GENERATOR</h1>
     <div class="container">
         <div class="upload-section">
-            <label>Upload Base Image:</label>
+            <label>Upload Image Here:</label>
             <input type="file" id="baseImageInput" accept="image/*">
+            <a id="downloadLink" href="#" download="combined-image.png" class="disabled">Download</a>
             <p>Drag to move, pinch/scroll to scale (mobile), or use mouse wheel (desktop)</p>
         </div>
         <canvas id="canvas" width="1000" height="1000"></canvas>
         <div id="result" class="result-section">
             <h3>Result:</h3>
             <img id="outputImage" alt="Combined Image" style="display: none;">
-            <a id="downloadLink" href="#" download="combined-image.png">Download</a>
+        </div>
+        <div class="text-section">
+            <label for="textInput">Add Text:</label>
+            <select id="fontSelect">
+                <option value="Arial">Arial</option>
+                <option value="Times New Roman">Times New Roman</option>
+                <option value="Courier New">Courier New</option>
+                <option value="Georgia">Georgia</option>
+            </select>
+            <textarea id="textInput" placeholder="Type here"></textarea>
         </div>
     </div>
     <script src="script.js"></script>
