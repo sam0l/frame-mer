@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Combiner</title>
+    <title>techsem dp blast maker ver. 4.20 </title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Image Combiner</h1>
+    <h1>techsem dp blast maker ver. 4.20 (scroll to see download link)</h1>
     <div class="container">
         <div class="upload-section">
             <label>Upload Base Image:</label>
@@ -16,11 +16,10 @@
                 <label>Frame Scale (0.5 - 2.0):</label>
                 <input type="range" id="scaleSlider" min="0.5" max="10" step="0.1" value="1">
                 <label>X Position:</label>
-                <input type="range" id="xPosSlider" min="0" max="200" value="0">
+                <input type="range" id="xPosSlider" min="-200" max="200" value="0">
                 <label>Y Position:</label>
-                <input type="range" id="yPosSlider" min="0" max="200" value="0">
+                <input type="range" id="yPosSlider" min="-200" max="200" value="0">
             </div>
-            <button onclick="combineImages()">Combine Images</button>
         </div>
         <canvas id="canvas" style="display: none;"></canvas>
         <div id="result" class="result-section">
